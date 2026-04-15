@@ -1,0 +1,59 @@
+### Регистрация пользователя
+POST http://localhost:3001/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "student@example.com",
+  "first_name": "Ivan",
+  "last_name": "Ivanov",
+  "password": "qwerty123"
+}
+
+### Вход в систему
+POST http://localhost:3001/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "student@example.com",
+  "password": "qwerty123"
+}
+
+### Текущий пользователь
+GET http://localhost:3001/api/auth/me
+Authorization: Bearer REPLACE_ACCESS_TOKEN
+
+### Получить список товаров
+GET http://localhost:3001/api/products
+
+### Получить товар по id
+GET http://localhost:3001/api/products/REPLACE_PRODUCT_ID
+Authorization: Bearer REPLACE_ACCESS_TOKEN
+
+### Создать товар
+POST http://localhost:3001/api/products
+Content-Type: application/json
+
+{
+  "title": "Американо",
+  "category": "Напитки",
+  "description": "Классический черный кофе",
+  "price": 210,
+  "stock": 14
+}
+
+### Обновить товар по id
+PUT http://localhost:3001/api/products/REPLACE_PRODUCT_ID
+Content-Type: application/json
+Authorization: Bearer REPLACE_ACCESS_TOKEN
+
+{
+  "title": "Большой американо",
+  "category": "Напитки",
+  "description": "Увеличенная порция классического кофе",
+  "price": 260,
+  "stock": 10
+}
+
+### Удалить товар по id
+DELETE http://localhost:3001/api/products/REPLACE_PRODUCT_ID
+Authorization: Bearer REPLACE_ACCESS_TOKEN

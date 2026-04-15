@@ -1,0 +1,38 @@
+$coffee-brown: #6F4E37;
+$light-cream: #F5EDE1;
+$accent-gold: #C19A6B;
+$dark-brown: #3C2F2F;
+$danger-red: #C0392B;
+
+@mixin card {
+  background: white;
+  border: 2px solid $coffee-brown;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  }
+}
+
+@mixin button($bg: $accent-gold, $color: white) {
+  background: $bg;
+  color: $color;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: darken($bg, 8%);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
