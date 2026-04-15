@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const https = require('https');
 const { Server } = require('socket.io');
 const { nanoid } = require('nanoid');
 const swaggerJsdoc = require('swagger-jsdoc');
@@ -32,10 +33,31 @@ const createJwtService = require('./security/tokens/jwtService');
 
 const app = express();
 const port = Number(process.env.PORT) || 3001;
-const server = http.createServer(app);
+const httpsEnabled = process.env.HTTPS_ENABLED === 'true';
+const sslKeyPath = process.env.SSL_KEY_PATH;
+const sslCertPath = process.env.SSL_CERT_PATH;
+let serverProtocol = 'http';
+
+function createAppServer() {
+  if (httpsEnabled && sslKeyPath && sslCertPath) {
+    const key = fs.readFileSync(path.resolve(sslKeyPath));
+    const cert = fs.readFileSync(path.resolve(sslCertPath));
+    serverProtocol = 'https';
+    return https.createServer({ key, cert }, app);
+  }
+
+  return http.createServer(app);
+}
+
+const server = createAppServer();
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://localhost:3000',
+      'https://localhost:3001'
+    ],
     methods: ['GET', 'POST']
   }
 });
@@ -81,7 +103,7 @@ const upload = multer({
 });
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -1258,10 +1280,13 @@ createSeedUsers()
     });
 
     server.listen(port, () => {
-      console.log(`Сервер запущен: http://localhost:${port}`);
-      console.log(`Swagger: http://localhost:${port}/api-docs`);
+      console.log(`Сервер запущен: ${serverProtocol}://localhost:${port}`);
+      console.log(`Swagger: ${serverProtocol}://localhost:${port}/api-docs`);
       console.log('Тестовые аккаунты: admin@example.com/admin123, seller@example.com/seller123, user@example.com/user123');
       console.log('VAPID public key:', VAPID_PUBLIC_KEY);
+      if (httpsEnabled && serverProtocol !== 'https') {
+        console.log('HTTPS_ENABLED=true, но SSL_KEY_PATH/SSL_CERT_PATH не заданы. Запущено в HTTP режиме.');
+      }
     });
   })
   .catch((error) => {
