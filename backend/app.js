@@ -191,7 +191,7 @@ const options = {
       version: '1.0.0',
       description: 'API для авторизации и управления товарами'
     },
-    servers: [{ url: `http://localhost:${port}` }]
+    servers: [{ url: `${serverProtocol}://localhost:${port}` }]
   },
   apis: [`${__filename}`]
 };

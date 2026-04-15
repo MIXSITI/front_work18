@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_HOST = 'http://localhost:3001';
+const API_HOST = process.env.REACT_APP_API_HOST || 'https://localhost:3001';
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 
