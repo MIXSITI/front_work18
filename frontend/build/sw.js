@@ -1,5 +1,6 @@
 const APP_SHELL_CACHE = 'app-shell-v2';
 const DYNAMIC_CACHE = 'dynamic-content-v1';
+const API_ORIGIN = `${self.location.protocol}//${self.location.hostname}:3001`;
 const APP_SHELL_ASSETS = [
   '/',
   '/index.html',
@@ -109,7 +110,7 @@ self.addEventListener('notificationclick', (event) => {
 
   if (action === 'snooze' && reminderId) {
     event.waitUntil(
-      fetch(`http://localhost:3001/snooze?reminderId=${encodeURIComponent(reminderId)}`, {
+      fetch(`${API_ORIGIN}/snooze?reminderId=${encodeURIComponent(reminderId)}`, {
         method: 'POST'
       })
         .catch((error) => {

@@ -230,6 +230,14 @@ cd backend
 npm start
 ```
 
+Если backend запущен по HTTPS, укажите это и для frontend:
+
+```powershell
+$env:REACT_APP_API_HOST="https://localhost:3001"
+cd frontend
+npm start
+```
+
 ---
 
 ## Тестовые аккаунты

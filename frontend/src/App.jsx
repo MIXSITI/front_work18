@@ -291,8 +291,6 @@ function App() {
             loading={formLoading}
             errorMessage={authError}
           />
-
-          <AppShellNotes />
         </div>
       </div>
     );

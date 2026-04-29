@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 
 const NOTES_STORAGE_KEY = 'offlineNotes';
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL =
+  process.env.REACT_APP_API_HOST ||
+  `${window.location.protocol}//${window.location.hostname}:3001`;
 
 const PAGE_TITLES = {
   home: 'Главная',
@@ -188,13 +190,23 @@ export default function AppShellNotes() {
           }
         }
 
-        await subscribeToPush();
-        await syncButtonsState();
+        try {
+          await subscribeToPush();
+          await syncButtonsState();
+        } catch (error) {
+          console.error('Push subscription failed:', error);
+          alert('Не удалось включить push-уведомления в текущем браузере/режиме.');
+        }
       };
 
       const handleDisable = async () => {
-        await unsubscribeFromPush();
-        await syncButtonsState();
+        try {
+          await unsubscribeFromPush();
+          await syncButtonsState();
+        } catch (error) {
+          console.error('Push unsubscribe failed:', error);
+          alert('Не удалось отключить push-уведомления. Повторите попытку.');
+        }
       };
 
       enableBtn.addEventListener('click', handleEnable);
